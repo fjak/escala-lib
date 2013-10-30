@@ -2,6 +2,7 @@ package scala.events
 
 import scala.collection.mutable.{ListBuffer,Stack}
 import scala.util.DynamicVariable
+import language.implicitConversions
 
 trait Event[+T] {
   /*
@@ -206,8 +207,8 @@ class ImperativeEvent[T] extends EventNode[T] {
       // once reactions are collected, we are after the triggering
       afterTrigger(v)
       // execute the collected reactions
-      reacts.foreach(
-        (react: () => Unit, trace: Trace) => {
+      reacts.foreach {
+        case (react, trace) => {
           eventTrace.withValue(trace) {
             //try {
               react()
@@ -219,7 +220,7 @@ class ImperativeEvent[T] extends EventNode[T] {
             }*/
           }
         }
-      )
+      }
     } else {
       afterTrigger(v)
     }
